@@ -1,23 +1,128 @@
+# 📊 Tixify — Entity Relationship Diagram (ERD)
+
+This document contains the Entity Relationship Diagram for the **Tixify** database schema.
+
+---
+
+## 🎨 GitHub Native ER Diagram (Mermaid.js)
+
+GitHub natively renders `mermaid` code blocks directly inside `README.md` files.
+
+```mermaid
+erDiagram
+    CITIES ||--o{ THEATERS : "1 to many"
+    THEATERS ||--o{ SCREENS : "1 to many"
+    SCREENS ||--o{ SEATS : "1 to many"
+    SCREENS ||--o{ SHOWS : "1 to many"
+    MOVIES ||--o{ SHOWS : "1 to many"
+    USERS ||--o{ BOOKINGS : "1 to many"
+    SHOWS ||--o{ BOOKINGS : "1 to many"
+    BOOKINGS ||--o{ BOOKING_SEATS : "1 to many"
+    SEATS ||--o{ BOOKING_SEATS : "1 to many"
+
+    CITIES {
+        int city_id PK
+        string name
+        string state
+    }
+
+    THEATERS {
+        int theater_id PK
+        int city_id FK
+        string name
+        string address
+    }
+
+    SCREENS {
+        int screen_id PK
+        int theater_id FK
+        string name
+        int total_seats
+    }
+
+    SEATS {
+        int seat_id PK
+        int screen_id FK
+        string seat_number
+        int seat_row
+        int seat_col
+        string seat_type
+    }
+
+    MOVIES {
+        int movie_id PK
+        string title
+        string genre
+        string language
+        int duration
+        string rating
+        date release_date
+    }
+
+    SHOWS {
+        int show_id PK
+        int movie_id FK
+        int screen_id FK
+        date show_date
+        time start_time
+        time end_time
+        decimal ticket_price
+    }
+
+    USERS {
+        int user_id PK
+        string name
+        string email
+        string phone
+        string password
+        datetime created_at
+    }
+
+    BOOKINGS {
+        int booking_id PK
+        int user_id FK
+        int show_id FK
+        decimal total_price
+        string status
+        datetime booked_at
+    }
+
+    BOOKING_SEATS {
+        int booking_id FK
+        int seat_id FK
+    }
+```
+
+---
+
+## 🛠️ Raw Graphviz (DOT) Code
+
+If you prefer to render an image using Graphviz CLI or an online tool like [Edotor](https://edotor.net/), you can use the code below:
+
+```dot
 digraph ERD {
- graph [rankdir=LR, splines=ortho, nodesep=0.45, ranksep=0.85, pad=0.2, bgcolor="white", fontname="Arial", label="Tixify — Entity Relationship Diagram (conceptual from seed SQL)", labelloc=t, fontsize=20];
- node [shape=plain, fontname="Arial"];
- edge [dir=both, arrowtail=none, arrowhead=vee, arrowsize=0.7, color="#475569", fontname="Arial", fontsize=9];
- cities [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>CITIES</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> city_id</TD></TR><TR><TD ALIGN="LEFT">name</TD></TR><TR><TD ALIGN="LEFT">state</TD></TR></TABLE> >];
- theaters [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>THEATERS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> theater_id</TD></TR><TR><TD ALIGN="LEFT">name, address</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> city_id</TD></TR></TABLE> >];
- screens [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>SCREENS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> screen_id</TD></TR><TR><TD ALIGN="LEFT">name, total_seats</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> theater_id</TD></TR></TABLE> >];
- seats [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>SEATS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> seat_id</TD></TR><TR><TD ALIGN="LEFT">seat_number, seat_row</TD></TR><TR><TD ALIGN="LEFT">seat_col, seat_type</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> screen_id</TD></TR></TABLE> >];
- movies [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dcfce7"><B>MOVIES</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> movie_id</TD></TR><TR><TD ALIGN="LEFT">title, genre, language</TD></TR><TR><TD ALIGN="LEFT">duration, rating, release_date</TD></TR></TABLE> >];
- shows [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dcfce7"><B>SHOWS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> show_id</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> movie_id, screen_id</TD></TR><TR><TD ALIGN="LEFT">show_date, start_time, end_time</TD></TR><TR><TD ALIGN="LEFT">ticket_price</TD></TR></TABLE> >];
- users [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#fef3c7"><B>USERS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> user_id</TD></TR><TR><TD ALIGN="LEFT">name, email, phone</TD></TR><TR><TD ALIGN="LEFT">password, created_at</TD></TR></TABLE> >];
- bookings [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#fef3c7"><B>BOOKINGS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> booking_id</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> user_id, show_id</TD></TR><TR><TD ALIGN="LEFT">total_price, status</TD></TR><TR><TD ALIGN="LEFT">booked_at</TD></TR></TABLE> >];
- booking_seats [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#f3e8ff"><B>BOOKING_SEATS</B></TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> booking_id</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> seat_id</TD></TR><TR><TD ALIGN="LEFT">(junction table)</TD></TR></TABLE> >];
- cities -> theaters [label="1 to many"];
- theaters -> screens [label="1 to many"];
- screens -> seats [label="1 to many"];
- movies -> shows [label="1 to many"];
- screens -> shows [label="1 to many"];
- users -> bookings [label="1 to many"];
- shows -> bookings [label="1 to many"];
- bookings -> booking_seats [label="1 to many"];
- seats -> booking_seats [label="1 to many"];
+  graph [rankdir=LR, splines=ortho, nodesep=0.45, ranksep=0.85, pad=0.2, bgcolor="white", fontname="Arial", label="Tixify — Entity Relationship Diagram (conceptual from seed SQL)", labelloc=t, fontsize=20];
+  node [shape=plain, fontname="Arial"];
+  edge [dir=both, arrowtail=none, arrowhead=vee, arrowsize=0.7, color="#475569", fontname="Arial", fontsize=9];
+
+  cities [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>CITIES</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> city_id</TD></TR><TR><TD ALIGN="LEFT">name</TD></TR><TR><TD ALIGN="LEFT">state</TD></TR></TABLE> >];
+  theaters [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>THEATERS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> theater_id</TD></TR><TR><TD ALIGN="LEFT">name, address</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> city_id</TD></TR></TABLE> >];
+  screens [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>SCREENS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> screen_id</TD></TR><TR><TD ALIGN="LEFT">name, total_seats</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> theater_id</TD></TR></TABLE> >];
+  seats [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>SEATS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> seat_id</TD></TR><TR><TD ALIGN="LEFT">seat_number, seat_row</TD></TR><TR><TD ALIGN="LEFT">seat_col, seat_type</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> screen_id</TD></TR></TABLE> >];
+  movies [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dcfce7"><B>MOVIES</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> movie_id</TD></TR><TR><TD ALIGN="LEFT">title, genre, language</TD></TR><TR><TD ALIGN="LEFT">duration, rating, release_date</TD></TR></TABLE> >];
+  shows [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#dcfce7"><B>SHOWS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> show_id</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> movie_id, screen_id</TD></TR><TR><TD ALIGN="LEFT">show_date, start_time, end_time</TD></TR><TR><TD ALIGN="LEFT">ticket_price</TD></TR></TABLE> >];
+  users [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#fef3c7"><B>USERS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> user_id</TD></TR><TR><TD ALIGN="LEFT">name, email, phone</TD></TR><TR><TD ALIGN="LEFT">password, created_at</TD></TR></TABLE> >];
+  bookings [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#fef3c7"><B>BOOKINGS</B></TD></TR><TR><TD ALIGN="LEFT"><B>PK</B> booking_id</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> user_id, show_id</TD></TR><TR><TD ALIGN="LEFT">total_price, status</TD></TR><TR><TD ALIGN="LEFT">booked_at</TD></TR></TABLE> >];
+  booking_seats [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#f3e8ff"><B>BOOKING_SEATS</B></TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> booking_id</TD></TR><TR><TD ALIGN="LEFT"><B>FK</B> seat_id</TD></TR><TR><TD ALIGN="LEFT">(junction table)</TD></TR></TABLE> >];
+
+  cities -> theaters [label="1 to many"];
+  theaters -> screens [label="1 to many"];
+  screens -> seats [label="1 to many"];
+  movies -> shows [label="1 to many"];
+  screens -> shows [label="1 to many"];
+  users -> bookings [label="1 to many"];
+  shows -> bookings [label="1 to many"];
+  bookings -> booking_seats [label="1 to many"];
+  seats -> booking_seats [label="1 to many"];
 }
+```
