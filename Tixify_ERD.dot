@@ -2,7 +2,6 @@
 
 This document contains the Entity Relationship Diagram for the **Tixify** database schema.
 
----
 
 ## 🎨 GitHub Native ER Diagram (Mermaid.js)
 
@@ -125,4 +124,4 @@ digraph ERD {
   bookings -> booking_seats [label="1 to many"];
   seats -> booking_seats [label="1 to many"];
 }
-```
+
